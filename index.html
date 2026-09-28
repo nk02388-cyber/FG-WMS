@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#161616">
+  <title>FG WMS | BCL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><img src="assets/bcl-logo.png" alt="BCL"><div><strong>BCL WMS</strong><small>FINISHED GOODS</small></div></div>
+      <div class="rail-title">คลังสินค้าสำเร็จรูป</div>
+      <nav id="nav" aria-label="เมนู FG WMS">
+        <button type="button" data-page="dashboard" class="active">01 <span>Dashboard</span></button>
+        <button type="button" data-page="stock">02 <span>สต็อก FG</span></button>
+        <button type="button" data-page="receive">03 <span>รับเข้าและจัดเก็บ</span></button>
+        <button type="button" data-page="issue">04 <span>เบิกจ่าย</span></button>
+        <button type="button" data-page="move">05 <span>ย้ายตำแหน่ง</span></button>
+        <button type="button" data-page="count">06 <span>ตรวจนับ</span></button>
+        <button type="button" data-page="history">07 <span>ประวัติรายการ</span></button>
+      </nav>
+      <p class="rail-note">ข้อมูลบันทึกในเบราว์เซอร์เครื่องนี้<br>ยังไม่เชื่อมฐานข้อมูลกลาง</p>
+    </aside>
+    <div class="main-wrap">
+      <header class="topbar"><div><span class="eyebrow">WAREHOUSE / FG</span><strong id="top-title">Dashboard</strong></div><div class="top-actions"><span class="local-badge">● LOCAL DATA</span><button type="button" id="export-btn" class="button secondary">ส่งออก JSON</button><label class="button secondary file-button">นำเข้า JSON<input id="import-file" type="file" accept=".json,application/json" hidden></label></div></header>
+      <main>
+        <section id="dashboard" class="page active" aria-labelledby="dashboard-title">
+          <div class="page-head"><div><p class="eyebrow">ภาพรวมคลัง</p><h1 id="dashboard-title">FG WMS Dashboard</h1><p class="muted">สินค้าสำเร็จรูป · ติดตามตามล็อตและตำแหน่งจัดเก็บ</p></div><button type="button" class="button primary" data-go="receive">+ รับสินค้า FG</button></div>
+          <div class="notice"><strong>ข้อมูลในเครื่องนี้</strong><span>ยอดคำนวณจากรายการที่บันทึกในเบราว์เซอร์นี้เท่านั้น โปรดสำรอง JSON ก่อนย้ายเครื่องหรือล้างข้อมูลเบราว์เซอร์</span></div>
+          <div class="kpis"><article class="kpi"><span>จำนวนคงเหลือ</span><strong id="kpi-qty">0</strong><small>หน่วย</small></article><article class="kpi"><span>SKU ที่มีสต็อก</span><strong id="kpi-sku">0</strong><small>รายการ</small></article><article class="kpi"><span>พาเลต / ชุดจัดเก็บ</span><strong id="kpi-pallet">0</strong><small>รายการ</small></article><article class="kpi"><span>ใกล้หมดอายุใน 90 วัน</span><strong id="kpi-expiring">0</strong><small>ชุดจัดเก็บ</small></article></div>
+          <div class="two-col"><section class="panel"><div class="panel-head"><h2>สต็อกตามสินค้า</h2><button type="button" class="text-button" data-go="stock">ดูทั้งหมด →</button></div><div id="dashboard-products" class="table-scroll"></div></section><section class="panel"><div class="panel-head"><h2>รายการล่าสุด</h2><button type="button" class="text-button" data-go="history">ดูประวัติ →</button></div><div id="dashboard-activity"></div></section></div>
+        </section>
+        <section id="stock" class="page" aria-labelledby="stock-title"><div class="page-head"><div><p class="eyebrow">คลังสินค้า</p><h1 id="stock-title">สต็อก FG</h1><p class="muted">ค้นหา SKU, ชื่อสินค้า, Lot หรือที่เก็บ</p></div></div><div class="toolbar"><label>ค้นหา<input id="stock-search" type="search" placeholder="ค้นหาสินค้า / Lot / ตำแหน่ง"></label><label>สถานะ<select id="stock-filter"><option value="all">ทั้งหมด</option><option value="available">มีคงเหลือ</option><option value="expiring">ใกล้หมดอายุ</option><option value="expired">หมดอายุ</option></select></label></div><div class="panel table-scroll" id="stock-table"></div></section>
+        <section id="receive" class="page" aria-labelledby="receive-title"><div class="page-head"><div><p class="eyebrow">INBOUND</p><h1 id="receive-title">รับเข้าและจัดเก็บ</h1><p class="muted">บันทึกสินค้าเป็นชุดจัดเก็บ แยกตามล็อตและตำแหน่ง</p></div></div><form id="receive-form" class="panel form-panel"><div class="form-grid"><label>เลขที่เอกสารรับเข้า <em>*</em><input name="document" required maxlength="60" placeholder="เช่น FG-REC-001"></label><label>รหัสสินค้า FG <em>*</em><input name="sku" required maxlength="60" placeholder="รหัส SKU"></label><label>ชื่อสินค้า <em>*</em><input name="name" required maxlength="120" placeholder="ชื่อสินค้า"></label><label>Lot / Batch <em>*</em><input name="lot" required maxlength="60" placeholder="เลขล็อต"></label><label>จำนวนรับ <em>*</em><input name="quantity" required type="number" min="0.001" step="any" inputmode="decimal"></label><label>หน่วย <em>*</em><input name="unit" required maxlength="20" placeholder="เช่น กล่อง"></label><label>ตำแหน่งจัดเก็บ <em>*</em><input name="location" required maxlength="60" placeholder="เช่น FG-A01"></label><label>รหัสพาเลต / ชุดจัดเก็บ <em>*</em><input name="pallet" required maxlength="60" placeholder="เช่น FGTAG-001"></label><label>วันที่ผลิต<input name="manufactured" type="date"></label><label>วันหมดอายุ<input name="expiry" type="date"></label><label class="wide">หมายเหตุ<input name="note" maxlength="300" placeholder="ข้อมูลเพิ่มเติม (ถ้ามี)"></label></div><div class="form-actions"><button class="button primary" type="submit">บันทึกรับเข้า</button><span class="muted">* ข้อมูลจำเป็น</span></div></form></section>
+        <section id="issue" class="page" aria-labelledby="issue-title"><div class="page-head"><div><p class="eyebrow">OUTBOUND</p><h1 id="issue-title">เบิกจ่าย FG</h1><p class="muted">เลือกชุดจัดเก็บ ตรวจล็อตและวันหมดอายุก่อนยืนยัน</p></div></div><form id="issue-form" class="panel form-panel"><div class="form-grid"><label>เลขที่เอกสารเบิก <em>*</em><input name="document" required maxlength="60"></label><label>ชุดจัดเก็บ <em>*</em><select name="batch" id="issue-batch" required></select></label><label>จำนวนเบิก <em>*</em><input name="quantity" required type="number" min="0.001" step="any"></label><label>ผู้รับ / ปลายทาง <em>*</em><input name="destination" required maxlength="120"></label><label class="wide">หมายเหตุ<input name="note" maxlength="300"></label></div><div id="issue-detail" class="selection-detail"></div><div class="form-actions"><button class="button primary" type="submit">ยืนยันเบิกจ่าย</button></div></form></section>
+        <section id="move" class="page" aria-labelledby="move-title"><div class="page-head"><div><p class="eyebrow">INTERNAL TRANSFER</p><h1 id="move-title">ย้ายตำแหน่ง</h1><p class="muted">ย้ายทั้งชุดหรือแบ่งจำนวนไปยังชุดจัดเก็บใหม่</p></div></div><form id="move-form" class="panel form-panel"><div class="form-grid"><label>เลขที่เอกสารย้าย <em>*</em><input name="document" required maxlength="60"></label><label>ชุดต้นทาง <em>*</em><select name="batch" id="move-batch" required></select></label><label>จำนวนย้าย <em>*</em><input name="quantity" required type="number" min="0.001" step="any"></label><label>ตำแหน่งปลายทาง <em>*</em><input name="location" required maxlength="60"></label><label>รหัสชุดปลายทาง <em>*</em><input name="pallet" required maxlength="60" placeholder="รหัสใหม่เมื่อแบ่งชุด"></label></div><div id="move-detail" class="selection-detail"></div><div class="form-actions"><button class="button primary" type="submit">ยืนยันย้ายตำแหน่ง</button></div></form></section>
+        <section id="count" class="page" aria-labelledby="count-title"><div class="page-head"><div><p class="eyebrow">CYCLE COUNT</p><h1 id="count-title">ตรวจนับสต็อก</h1><p class="muted">บันทึกยอดตรวจจริงพร้อมส่วนต่างและประวัติการปรับยอด</p></div></div><form id="count-form" class="panel form-panel"><div class="form-grid"><label>เลขที่เอกสารตรวจนับ <em>*</em><input name="document" required maxlength="60"></label><label>ชุดจัดเก็บ <em>*</em><select name="batch" id="count-batch" required></select></label><label>ยอดที่นับได้ <em>*</em><input name="quantity" required type="number" min="0" step="any"></label><label>ผู้ตรวจนับ <em>*</em><input name="counter" required maxlength="120"></label><label class="wide">เหตุผล / หมายเหตุ <em>*</em><input name="note" required maxlength="300"></label></div><div id="count-detail" class="selection-detail"></div><div class="form-actions"><button class="button primary" type="submit">บันทึกผลตรวจนับและปรับยอด</button></div></form></section>
+        <section id="history" class="page" aria-labelledby="history-title"><div class="page-head"><div><p class="eyebrow">TRACEABILITY</p><h1 id="history-title">ประวัติรายการ</h1><p class="muted">การรับเข้า เบิกจ่าย ย้าย และตรวจนับที่บันทึกในเครื่องนี้</p></div></div><div class="toolbar"><label>ค้นหา<input id="history-search" type="search" placeholder="เอกสาร / SKU / Lot / ตำแหน่ง"></label></div><div class="panel table-scroll" id="history-table"></div></section>
+      </main>
+    </div>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
