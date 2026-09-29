@@ -8,7 +8,7 @@
   <meta name="description" content="FG WMS ระบบจัดการคลังสินค้าสำเร็จรูปของ BIO-COSLAB">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="app.js" defer></script>
 </head>
@@ -29,7 +29,7 @@
       <p class="rail-note">ข้อมูลบันทึกในเบราว์เซอร์เครื่องนี้<br>ยังไม่เชื่อมฐานข้อมูลกลาง</p>
     </aside>
     <div class="main-wrap">
-      <header class="topbar"><div><span class="eyebrow">WAREHOUSE / FG</span><strong id="top-title">Dashboard</strong></div><div class="top-actions"><span class="local-badge">● LOCAL DATA</span><button type="button" id="export-btn" class="button secondary">ส่งออก JSON</button><label class="button secondary file-button">นำเข้า JSON<input id="import-file" type="file" accept=".json,application/json" hidden></label></div></header>
+      <header class="topbar"><div><span class="eyebrow">WAREHOUSE / FG</span><strong id="top-title">Dashboard</strong></div><div class="top-actions"><span class="local-badge">● LOCAL DATA</span><button type="button" id="theme-toggle" class="button secondary" aria-label="เปลี่ยนเป็นโหมดมืด" aria-pressed="false" title="เปลี่ยนเป็นโหมดมืด">◐ <span>โหมดมืด</span></button><button type="button" id="export-btn" class="button secondary">ส่งออก JSON</button><label class="button secondary file-button">นำเข้า JSON<input id="import-file" type="file" accept=".json,application/json" hidden></label></div></header>
       <main>
         <section id="dashboard" class="page active" aria-labelledby="dashboard-title">
           <div class="page-head"><div><p class="eyebrow">ภาพรวมคลัง</p><h1 id="dashboard-title">FG WMS</h1><p class="muted">ระบบจัดการคลังสินค้าสำเร็จรูปของ BIO-COSLAB</p></div><button type="button" class="button primary" data-go="receive">+ รับสินค้า FG</button></div>

@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const KEY = 'bcl-fg-wms-v1';
+  const THEME_KEY = 'bcl-fg-wms-theme';
   const TYPES = { receive: 'รับเข้า', issue: 'เบิกจ่าย', move: 'ย้ายตำแหน่ง', count: 'ตรวจนับ' };
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => [...document.querySelectorAll(s)];
@@ -19,6 +20,19 @@
     const el = $('#toast'); el.textContent = message; el.className = `show${error ? ' error' : ''}`;
     clearTimeout(toastTimer); toastTimer = setTimeout(() => el.className = '', 4300);
   }
+  function applyTheme(theme, save = false) {
+    const dark = theme === 'dark';
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    const button = $('#theme-toggle');
+    const label = dark ? 'เปลี่ยนเป็นโหมดสว่าง' : 'เปลี่ยนเป็นโหมดมืด';
+    button.setAttribute('aria-label', label);
+    button.setAttribute('title', label);
+    button.setAttribute('aria-pressed', String(dark));
+    button.querySelector('span').textContent = dark ? 'โหมดสว่าง' : 'โหมดมืด';
+    if (save) localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
+  }
+  try { applyTheme(localStorage.getItem(THEME_KEY) || 'light'); }
+  catch (_) { applyTheme('light'); }
   function validateData(data) {
     if (!data || data.version !== 1 || !Array.isArray(data.batches) || !Array.isArray(data.events)) throw Error('ไฟล์ JSON ไม่ใช่ข้อมูล FG WMS เวอร์ชัน 1');
     const ids = new Set(), pallets = new Set();
@@ -122,6 +136,10 @@
   $$('[data-go]').forEach(b=>b.addEventListener('click',()=>page(b.dataset.go)));
   for (const id of ['issue','move','count']) $(`#${id}-batch`).addEventListener('change',()=>renderSelectionDetail(id));
   $('#stock-search').addEventListener('input',renderStock); $('#stock-filter').addEventListener('change',renderStock); $('#history-search').addEventListener('input',renderHistory);
+  $('#theme-toggle').addEventListener('click', () => {
+    try { applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark', true); }
+    catch (e) { toast(`บันทึกธีมไม่สำเร็จ: ${e.message}`, true); }
+  });
   $('#export-btn').addEventListener('click',()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}), url=URL.createObjectURL(blob), a=document.createElement('a'); a.href=url; a.download=`FG-WMS-backup-${today()}.json`; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); });
   $('#import-file').addEventListener('change',async ev=>{ const file=ev.target.files[0]; if(!file)return; try { const data=validateData(JSON.parse(await file.text())); if(!confirm('นำเข้าจะเขียนทับข้อมูล FG WMS ในเบราว์เซอร์นี้ ต้องการดำเนินการหรือไม่?')) return; const old=state; state=data; try{persist();render();toast('นำเข้าข้อมูลแล้ว');}catch(e){state=old;throw e;} }catch(e){toast(`นำเข้าไม่สำเร็จ: ${e.message}`,true);}finally{ev.target.value='';} });
   render(); const initial=location.hash.slice(1); if ($(`#nav button[data-page="${initial}"]`)) page(initial);
