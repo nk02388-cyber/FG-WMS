@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#161616">
-  <title>FG WMS | BCL</title>
+  <title>FG WMS | BCL WMS</title>
+  <meta name="description" content="FG WMS ระบบจัดการคลังสินค้าสำเร็จรูปของ BIO-COSLAB">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,7 +15,7 @@
 <body>
   <div class="shell">
     <aside class="sidebar">
-      <div class="brand"><img src="assets/bcl-logo.png" alt="BCL"><div><strong>BCL WMS</strong><small>FINISHED GOODS</small></div></div>
+      <div class="brand"><img src="assets/bcl-logo.png" alt="BCL"><div><strong>FG WMS</strong><small>BIO-COSLAB</small></div></div>
       <div class="rail-title">คลังสินค้าสำเร็จรูป</div>
       <nav id="nav" aria-label="เมนู FG WMS">
         <button type="button" data-page="dashboard" class="active">01 <span>Dashboard</span></button>
@@ -31,7 +32,7 @@
       <header class="topbar"><div><span class="eyebrow">WAREHOUSE / FG</span><strong id="top-title">Dashboard</strong></div><div class="top-actions"><span class="local-badge">● LOCAL DATA</span><button type="button" id="export-btn" class="button secondary">ส่งออก JSON</button><label class="button secondary file-button">นำเข้า JSON<input id="import-file" type="file" accept=".json,application/json" hidden></label></div></header>
       <main>
         <section id="dashboard" class="page active" aria-labelledby="dashboard-title">
-          <div class="page-head"><div><p class="eyebrow">ภาพรวมคลัง</p><h1 id="dashboard-title">FG WMS Dashboard</h1><p class="muted">สินค้าสำเร็จรูป · ติดตามตามล็อตและตำแหน่งจัดเก็บ</p></div><button type="button" class="button primary" data-go="receive">+ รับสินค้า FG</button></div>
+          <div class="page-head"><div><p class="eyebrow">ภาพรวมคลัง</p><h1 id="dashboard-title">FG WMS</h1><p class="muted">ระบบจัดการคลังสินค้าสำเร็จรูปของ BIO-COSLAB</p></div><button type="button" class="button primary" data-go="receive">+ รับสินค้า FG</button></div>
           <div class="notice"><strong>ข้อมูลในเครื่องนี้</strong><span>ยอดคำนวณจากรายการที่บันทึกในเบราว์เซอร์นี้เท่านั้น โปรดสำรอง JSON ก่อนย้ายเครื่องหรือล้างข้อมูลเบราว์เซอร์</span></div>
           <div class="kpis"><article class="kpi"><span>จำนวนคงเหลือ</span><strong id="kpi-qty">0</strong><small>หน่วย</small></article><article class="kpi"><span>SKU ที่มีสต็อก</span><strong id="kpi-sku">0</strong><small>รายการ</small></article><article class="kpi"><span>พาเลต / ชุดจัดเก็บ</span><strong id="kpi-pallet">0</strong><small>รายการ</small></article><article class="kpi"><span>ใกล้หมดอายุใน 90 วัน</span><strong id="kpi-expiring">0</strong><small>ชุดจัดเก็บ</small></article></div>
           <div class="two-col"><section class="panel"><div class="panel-head"><h2>สต็อกตามสินค้า</h2><button type="button" class="text-button" data-go="stock">ดูทั้งหมด →</button></div><div id="dashboard-products" class="table-scroll"></div></section><section class="panel"><div class="panel-head"><h2>รายการล่าสุด</h2><button type="button" class="text-button" data-go="history">ดูประวัติ →</button></div><div id="dashboard-activity"></div></section></div>
